@@ -1,0 +1,227 @@
+#
+# Copyright (C) 2025 The Android Open Source Project
+# Copyright (C) 2025 SebaUbuntu's TWRP device tree generator
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+DEVICE_PATH := device/oneplus/OP5958L1
+
+# For building with minimal manifest
+ALLOW_MISSING_DEPENDENCIES := true
+SOONG_ALLOW_MISSING_DEPENDENCIES := true
+BUILD_BROKEN_DUP_RULES := true
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
+BUILD_BROKEN_MISSING_REQUIRED_MODULES := true
+
+# Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 := 
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := kryo300
+
+TARGET_2ND_ARCH := arm
+TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_CPU_ABI := armeabi-v7a
+TARGET_2ND_CPU_ABI2 := armeabi
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a75
+
+ENABLE_CPUSETS := true
+ENABLE_SCHEDBOOST := true
+
+# 64-bit
+TARGET_SUPPORTS_64_BIT_APPS := true
+TARGET_IS_64_BIT := true
+
+# Bootloader
+PRODUCT_PLATFORM := holi
+TARGET_BOOTLOADER_BOARD_NAME := holi
+TARGET_NO_BOOTLOADER := true
+TARGET_USES_UEFI := true
+
+# Kernel
+BOARD_BOOT_HEADER_VERSION := 4
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
+BOARD_DTB_OFFSET         := 0x01f00000
+BOARD_KERNEL_BASE        := 0x00000000
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+BOARD_TAGS_OFFSET        := 0x00000100
+BOARD_KERNEL_OFFSET      := 0x00008000
+BOARD_RAMDISK_OFFSET     := 0x01000000
+
+BOARD_KERNEL_IMAGE_NAME := kernel
+TARGET_KERNEL_SOURCE    := kernel/oneplus/sm6375
+TARGET_KERNEL_CONFIG    := vendor/holi-qgki_defconfig vendor/debugfs.config
+BOARD_KERNEL_PAGESIZE   := 4096
+BOARD_RAMDISK_USE_LZ4   := true
+TARGET_KERNEL_ARCH      := arm64
+TARGET_KERNEL_HEADER_ARCH   := arm64
+TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_KERNEL_NO_GCC        := true
+TARGET_NO_KERNEL            := false
+
+BOARD_KERNEL_CMDLINE := \
+    androidboot.hardware=qcom \
+    androidboot.memcg=1 \
+    androidboot.fstab_suffix=default \
+    androidboot.usbcontroller=4e00000.dwc3 \
+    cgroup.memory=nokmem,nosocket \
+    loop.max_part=7 \
+    lpm_levels.sleep_disabled=1 \
+    msm_rtb.filter=0x237 \
+    reboot=panic_warm \
+    service_locator.enable=1 \
+    swiotlb=0 \
+    iptable_raw.raw_before_defrag=1 \
+    ip6table_raw.raw_before_defrag=1 \
+    androidboot.init_fatal_reboot_target=recovery
+
+# Kernel - prebuilt
+TARGET_FORCE_PREBUILT_KERNEL := true
+ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
+endif
+
+# DTB
+ifndef BOARD_PREBUILT_DTBOIMAGE
+BOARD_KERNEL_SEPARATED_DTBO := true
+endif
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
+BOARD_PREBUILT_DTBIMAGE_DIR := $(DEVICE_PATH)/prebuilt
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+
+# Partitions
+BOARD_PRODUCTIMAGE_MINIMAL_PARTITION_RESERVED_SIZE := false
+-include vendor/lineage/config/BoardConfigReservedSize.mk
+BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_USES_SYSTEM_EXTIMAGE := true
+BOARD_USES_PRODUCTIMAGE := true
+BOARD_BOOTIMAGE_PARTITION_SIZE := 167772160
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 167772160
+BOARD_DTBOIMG_PARTITION_SIZE := 25165824
+BOARD_HAS_LARGE_FILESYSTEM := true
+BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_PRODUCTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_SYSTEM_EXTIMAGE_FILE_SYSTEM_TYPE := ext4
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := erofs
+BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
+BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
+
+# Dynamic Partition
+BOARD_SUPER_PARTITION_SIZE := 9126805504 
+BOARD_SUPER_PARTITION_GROUPS := oneplus_dynamic_partitions
+BOARD_ONEPLUS_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor vendor_dlkm odm
+BOARD_ONEPLUS_DYNAMIC_PARTITIONS_SIZE := 9122611200 # BOARD_SUPER_PARTITION_SIZE - 4MB
+
+# Workaround for error copying vendor files to recovery ramdisk
+TARGET_COPY_OUT_ODM := odm
+TARGET_COPY_OUT_VENDOR_DLKM := vendor_dlkm
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_COPY_OUT_SYSTEM_EXT := system_ext
+TARGET_COPY_OUT_PRODUCT := product
+BOARD_ODMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDOR_DLKMIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := erofs
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+
+# Metadata
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+BOARD_USES_METADATA_PARTITION := true
+
+# Platform
+TARGET_BOARD_PLATFORM := oneplus_sm6375
+BOARD_USES_QCOM_HARDWARE := true
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno619
+TARGET_USES_HARDWARE_QCOM_BOOTCTRL := true
+QCOM_BOARD_PLATFORMS += $(TARGET_BOARD_PLATFORM)
+
+# Recovery
+AB_OTA_UPDATER:= true
+TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+TARGET_NO_RECOVERY := true
+TARGET_USES_MKE2FS := true
+BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_USES_RECOVERY_AS_BOOT := false
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+
+# Partitions (listed in the file) to be wiped under recovery
+TARGET_RECOVERY_WIPE := $(DEVICE_PATH)/recovery.wipe
+
+# Extras
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
+
+# TWRP specific build flags
+RECOVERY_SDCARD_ON_DATA := true
+TW_USE_LEGACY_BATTERY_SERVICES := true
+TARGET_RECOVERY_QCOM_RTC_FIX := true
+TW_CUSTOM_CPU_TEMP_PATH := "/sys/devices/virtual/thermal/thermal_zone50/temp"
+TW_THEME := portrait_hdpi
+TW_BRIGHTNESS_PATH := "/sys/class/backlight/panel0-backlight/brightness"
+TW_DEFAULT_BRIGHTNESS := 480
+TW_MAX_BRIGHTNESS := 2047
+TW_EXCLUDE_DEFAULT_USB_INIT := true
+TW_EXTRA_LANGUAGES := true
+TW_FRAMERATE := 120
+TW_STATUS_ICONS_ALIGN := center
+TW_CUSTOM_CPU_POS := 50
+TW_CUSTOM_CLOCK_POS := 300
+TW_CUSTOM_BATTERY_POS := 800
+TW_EXCLUDE_APEX := true
+TW_NO_SCREEN_BLANK := true
+TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_LIBRESETPROP := true
+TW_INCLUDE_FASTBOOTD := true
+TW_EXCLUDE_TWRPAPP := true
+TW_INCLUDE_FB2PNG := true
+TW_USE_TOOLBOX := true
+TW_NO_EXFAT_FUSE := true
+TW_INPUT_BLACKLIST := "hbtp_vm"
+TW_HAS_EDL_MODE := true
+TW_BATTERY_SYSFS_WAIT_SECONDS := 5
+TW_PREPARE_DATA_MEDIA_EARLY := true
+TW_USE_SERIALNO_PROPERTY_FOR_DEVICE_ID := true
+TW_BACKUP_EXCLUSIONS := /data/fonts
+TW_BACKUP_EXCLUSIONS := /data/nandswap
+TARGET_USES_LOGD := true
+TWRP_INCLUDE_LOGCAT := true
+TW_OVERRIDE_SYSTEM_PROPS := \
+    "ro.build.fingerprint=ro.system.build.fingerprint;ro.build.version.incremental"
+TW_LOAD_VENDOR_MODULES_EXCLUDE_GKI := true
+TW_LOAD_PREBUILT_MODULES := true
+TW_LOAD_VENDOR_MODULES := "q6_pdr_dlkm.ko q6_notifier_dlkm.ko snd_event_dlkm.ko apr_dlkm.ko adsp_loader_dlkm.ko"
+
+# System as root
+BOARD_ROOT_EXTRA_FOLDERS := bluetooth dsp firmware persist
+
+# Verified Boot
+BOARD_AVB_ENABLE := true
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_AVB_VBMETA_SYSTEM := product system system_ext
+BOARD_AVB_VBMETA_SYSTEM_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VBMETA_SYSTEM_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
+BOARD_AVB_VBMETA_SYSTEM_ROLLBACK_INDEX_LOCATION := 2
+
+# Recovery-in-boot / vendor_boot
+TARGET_NO_RECOVERY := true
+BOARD_USES_RECOVERY_AS_BOOT := false
+BOARD_EXCLUDE_KERNEL_FROM_RECOVERY_IMAGE := true
+BOARD_MOVE_RECOVERY_RESOURCES_TO_VENDOR_BOOT := true
+BOARD_INCLUDE_RECOVERY_RAMDISK_IN_VENDOR_BOOT := true
+
+# maintainer
+BOARD_MAINTAINER_NAME := RJohn
+TW_DEVICE_VERSION := $(BOARD_MAINTAINER_NAME)
+
+
