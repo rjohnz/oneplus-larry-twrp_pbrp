@@ -162,8 +162,8 @@ TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
 # TWRP specific build flags
 TW_STATUS_ICONS_ALIGN := center
-RECOVERY_SDCARD_ON_DATA := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
+RECOVERY_SDCARD_ON_DATA := true
 TW_USE_LEGACY_BATTERY_SERVICES := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/devices/virtual/thermal/thermal_zone50/temp"
