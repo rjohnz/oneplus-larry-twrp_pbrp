@@ -23,4 +23,4 @@ Announced 2023, April 04 Available. Released 2023, April 11
 
 ## Device picture
 
-![Xiaomi 12 Lite ]([https://fdn2.gsmarena.com/vv/pics/oneplus/oneplus-nord-ce-3-lite-1.jpg](https://oasis.opstatics.com/content/dam/oasis/page/2023/global/product/larry/specs/product-black.png))
+![OnePlus Nord CE3 Lite ]((https://oasis.opstatics.com/content/dam/oasis/page/2023/global/product/larry/specs/product-black.png)
