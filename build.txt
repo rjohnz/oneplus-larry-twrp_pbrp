@@ -4,8 +4,3 @@ export ALLOW_MISSING_DEPENDENCIES=true; . build/envsetup.sh; lunch twrp_OP5958L1
 
 mka vendorbootimage
 
-For PBRP
-
-. build/envsetup.sh
-lunch pb_OP5958L1-eng
-mka vendorbootimage
